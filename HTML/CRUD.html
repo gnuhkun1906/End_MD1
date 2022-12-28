@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CRED</title>
+    <script src="../JS/Product.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<!--<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"-->
+<!--        data-bs-whatever="@mdo">-->
+<!--</button>-->
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="col-form-label">Image</label>
+                        <input type="text" class="form-control" id="update-image">
+                    </div>
+                    <div class="mb-3">
+                        <label class="col-form-label">Product Name</label>
+                        <input type="text" class="form-control" id="update-name">
+                    </div>
+                    <div class="mb-3">
+                        <label class="col-form-label">Message:</label>
+                        <input type="text" class="form-control" id="update-message">
+                    </div>
+                    <div class="mb-3">
+                        <label class="col-form-label">Price</label>
+                        <input type="text" class="form-control" id="update-price">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="updateProduct()">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="rounded col-12" style="background-color: #d1b0f6; text-align: center; margin: 20px 20px 20px 20px">
+        <div class="btn btn-success">
+            <button onclick="createProduct()" type="submit">CreatProduct <i style="color: orangered"
+                                                                            class="bi bi-pencil"></i></button>
+        </div>
+        <div class="input-group mb-3">
+            <input id="image" type="text" class="form-control" placeholder="image" aria-label="Recipient's username"
+                   aria-describedby="basic-addon2">
+            <span class="input-group-text">Image</span>
+        </div>
+        <div class="input-group mb-3">
+            <input id="name" type="text" class="form-control" placeholder="Name" aria-label="Recipient's username"
+                   aria-describedby="basic-addon2">
+            <span class="input-group-text">Name</span>
+        </div>
+        <div class="input-group mb-3">
+            <input id="message" type="text" class="form-control" placeholder="Message"
+                   aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <span class="input-group-text">Message</span>
+        </div>
+        <div class="input-group mb-3">
+            <input id="price" type="text" class="form-control" placeholder="Price" aria-label="Recipient's username"
+                   aria-describedby="basic-addon2">
+            <span class="input-group-text">Price</span>
+        </div>
+        <table class="table">
+            <tr CLASS="table-primary">
+                <th>ID</th>
+                <th>IMAGE</th>
+                <th>NAME</th>
+                <th>MESSAGE</th>
+                <th>PRICE</th>
+                <th>EDIT</th>
+                <th>DELETE</th>
+            </tr>
+            <tbody id="drawTable"></tbody>
+        </table>
+    </div>
+</div>
+<script>
+    let listProduct = JSON.parse(localStorage.getItem('list_product'))
+    if (listProduct == null) {
+        listProduct = []
+    }
+
+    function showListProduct() {
+        let drawTable = '';
+        for (let i = 0; i < listProduct.length; i++) {
+            drawTable += `<tr>
+                                <td>${i}</td>
+                                <td>${listProduct[i].image}</td>
+                                <td>${listProduct[i].name}</td>
+                                <td>${listProduct[i].message}</td>
+                                <td>${listProduct[i].price}</td>
+                                <td><button  data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="showUpdateModal(${listProduct[i].id})" class="btn btn- success" ><i class="bi bi-pencil-fill"></i></button></td>
+                                <td><button   onclick="deleteProduct(${i})" class="btn btn- success" ><i class="bi bi-trash-fill"></i></button></td>
+                            </tr>`
+        }
+        document.getElementById('drawTable').innerHTML = drawTable
+        console.log('có lấy đc không',drawTable)
+
+    }
+
+    showListProduct()
+
+    function createProduct() {
+        let id;
+        console.log('id',id)
+        let image = document.getElementById('image').value;
+        let name = document.getElementById('name').value;
+        let message = document.getElementById('message').value;
+        let price = document.getElementById('price').value;
+        if (listProduct.length === 0) {
+            id = 1
+        } else {
+            id = listProduct[listProduct.length - 1].id + 1;
+        }
+        let product = new Product(id, image, name, message, price)
+        listProduct.push(product);
+        localStorage.removeItem('list_product');
+        localStorage.setItem('list_product', JSON.stringify(listProduct));
+        showListProduct()
+    }
+
+    function findById(id) {
+        for (let i = 0; i < listProduct.length; i++) {
+            if (id === listProduct[i].id) {
+                return listProduct[i]
+            }
+
+        }
+    }
+
+    let idUpdate = 0;
+
+    function showUpdateModal(id) {
+        idUpdate = id;
+        console.log('---->', id)
+        let product = findById(id);
+        console.log('.,,....', product)
+        document.getElementById('update-image').value = product.image
+        document.getElementById('update-name').value = product.name
+        document.getElementById('update-message').value = product.message
+        document.getElementById('update-price').value = product.price
+
+    }
+
+
+    function updateProduct() {
+        let updateProduct = findById(idUpdate)
+        let updateImage = document.getElementById('update-image').value;
+        let updateName = document.getElementById('update-name').value;
+        let updateMessage = document.getElementById('update-message').value;
+        let updatePrice = document.getElementById('update-price').value;
+        updateProduct.image = updateImage
+        updateProduct.name = updateName
+        updateProduct.message = updateMessage
+        updateProduct.price = updatePrice
+        localStorage.removeItem('list_product');
+        localStorage.setItem('list_product', JSON.stringify(listProduct))
+        showListProduct()
+
+    }
+
+    function deleteProduct(index) {
+
+        if (confirm('Hỏi 1 lần thôi là muốn xóa đúng không???')) {
+            listProduct.splice(index, 1)
+        }
+        localStorage.removeItem('list_product')
+        localStorage.setItem('list_product', JSON.stringify(listProduct))
+    }
+    showListProduct();
+
+    var exampleModal = document.getElementById('exampleModal')
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+        // Button that triggered the modal
+        var button = event.relatedTarget
+        // Extract info from data-bs-* attributes
+        var recipient = button.getAttribute('data-bs-whatever')
+        // If necessary, you could initiate an AJAX request here
+        // and then do the updating in a callback.
+        //
+        // Update the modal's content.
+        var modalTitle = exampleModal.querySelector('.modal-title')
+        var modalBodyInput = exampleModal.querySelector('.modal-body input')
+
+        modalTitle.textContent = 'Update Student :  ' + recipient
+        modalBodyInput.value = recipient
+    })
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+</body>
+</html>

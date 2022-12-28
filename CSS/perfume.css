@@ -1,0 +1,153 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+/*#wrapper{*/
+/*    max-width: 1170px;*/
+/*    margin: 0 auto;*/
+
+
+body{
+    font-family: 'Open san' ,sans-serif;
+    font-size: 14px;
+    color: #1a1818;
+    line-height: 1.15;
+}
+
+header{
+    /*position: relative;*/
+    background-image: linear-gradient(0, #dcc9ea, #dcc0f3);
+    max-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 30px;
+    height: 70px;
+    /*align-items: center;*/
+    flex-basis: 33.3%;
+    font-weight:bold;
+
+}
+ul{
+    margin: auto;
+    /*align-items: center;*/
+}
+.select ul li{
+    list-style: none;
+    float: left;
+    line-height: 70px;
+    padding: 0 30px;
+    text-transform: uppercase;
+}
+li:hover{
+    color: red;
+}
+.select ul li{
+    display: flex;
+
+}
+li button{
+    border: none;
+    background-color:#ecd7cc ;
+    font-weight: bold;
+}
+li button:hover{
+    color: red;
+}
+.search{
+    margin: auto;
+}
+.search button{
+    border: none;
+}
+
+input {
+    width: 250px;
+    height: 30px;
+    border: none;
+    border-bottom: 1px solid #333;
+}
+ button{
+    border: none;
+    background-image: linear-gradient(0, #dcc9ea, #dcc0f3);
+    /*border-bottom: 1px solid #333;*/
+}
+.register{
+    display: flex;
+    justify-content: space-between;
+    float: right;
+    padding: 0 30px;
+    align-items: center;
+}
+.register button{
+    border: none;
+    background-image: linear-gradient(0, #dcc9ea, #dcc0f3);
+    /*background-color:#ecd7cc ;*/
+    font-weight: bold;
+}
+.register button:hover{
+    color: red;
+
+}
+
+.headline{
+    text-align: center;
+    margin: 40px 0;
+}
+h3{
+    font-size: 18px;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    display: inline-block;
+    border: 1px solid #bebebe;
+    color: #555;
+    font-weight: 600;
+}
+
+img{
+    max-width: 100%;
+    height: auto;
+    /*display: block;*/
+    /*position: relative;*/
+    /*loại bỏ khoảng cachs giữa các thẻ div*/
+}
+img:hover{
+    opacity: 80%;
+}
+
+
+h5{
+    font-weight: bold;
+    text-align: center;
+}
+p{
+    font-size: 18px;
+    margin-left: 10px;
+}
+a{
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+
+    /*//bỏ phần gạch chaan*/
+}
+
+#buy{
+    font-size: 15px;
+    text-decoration: none;
+    /*bỏ đường gạch chân*/
+    /*text-transform: uppercase;*/
+    background-color: #7777ee;
+    color: white;
+    display: block;
+    text-align: center;
+    /*padding: 10px 0;*/
+    /*position: absolute;*/
+    width: 100%;
+    /*bottom: -36px;*/
+    /*transition: 0.25s;*/
+    opacity: 0.8;
+}
+#buy:hover{
+    color: red;
+}
+

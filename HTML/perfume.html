@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfume</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="../CSS/perfume.css">
+</head>
+<body>
+<header>
+    <div class="select">
+        <ul>
+            <li><button onclick="home()">TRANG CHỦ</button></li>
+
+            <li><button onclick="perfume()">PERFUME</button></li>
+            <li><button onclick="creat()">CRUD</button></li>
+        </ul>
+    </div>
+    <div class="search">
+        <input type="text" id="" oninput="actionSearch()" class="fa fa-search" placeholder="Tìm kiếm" >
+        <button onclick=""><i class="bi bi-search"></i></button>
+    </div>
+    <div class="register">
+        <div class="login"><button onclick="login()">LOGIN</button></div>
+        <div class="register"><button onclick="register1()">REGISTER</button></div>
+    </div>
+
+</header>
+<div class="headline">
+    <h3>Perfume</h3>
+</div>
+<div class="row row-cols-1 row-cols-md-4 g-4" id="drawTable">
+
+</div>
+
+<script>
+  listProduct=JSON.parse(localStorage.getItem('list_product'))
+  if (listProduct==null){
+      listProduct=[]
+  }
+  function showListProduct(list){
+
+    let drawTable='';
+    for (let i = 0; i <list.length ; i++) {
+      drawTable+=`<div class="col">
+  <div class="card">
+    <img src="../image2/${list[i].image}" class="card-img-top" alt="">
+<a href="" id="buy">MUA NGAY</a>
+    <div class="card-body" >
+
+      <h5 class="card-title">${list[i].name}</h5>
+      <p class="card-text">${list[i].message}</p>
+      <a class="card-text">${list[i].price}</a>
+    </div>
+
+  </div>
+</div>`
+
+    } document.getElementById('drawTable').innerHTML=drawTable;
+  }
+  let search1 = localStorage.getItem("search");
+  console.log(search1)
+  if (search1!=null){
+        actionSearch()
+  }else {
+      showListProduct(listProduct)
+  }
+  function actionSearch(){
+      let listSearch =[]
+      let isEmpty= false
+
+      for (let i = 0; i <listProduct.length ; i++) {
+          if (listProduct[i].name.toLowerCase().includes(search1.toLowerCase())){
+              listSearch.push(listProduct[i])
+              isEmpty= true
+          }
+      }
+      if (isEmpty){
+          showListProduct(listSearch);
+          localStorage.removeItem('search')
+      }else {
+          document.write("ERROR")
+      }
+
+  }
+function home(){
+      location.href='Home.html'
+}
+  function login(){
+      location.href="login.html"
+  }
+  function register1(){
+      location.href="Sign up.html"
+  }
+  function perfume(){
+      location.href='Perfume.html'
+  }
+  function creat(){
+      location.href='CRUD.html'
+  }
+
+      let user = JSON.parse(localStorage.getItem('user'));
+      if (user != null) {
+      document.querySelector('.register').innerHTML = `<div class="login"><button>${user.userName}</button></div>
+                                                       <div class="register"><button onclick="logOut()">LogOut</button></div>
+                                                         `
+  }
+
+      function logOut() {
+      if (confirm('Bạn chắc chắn không còn lưu luyến gì chứ??')) {
+      localStorage.removeItem('user')
+      location.href = 'Home.html';
+  }
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+</body>
+</html>
