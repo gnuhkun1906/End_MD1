@@ -2,10 +2,13 @@ class User{
     userName;
     email;
     password;
-    constructor(userName, email, password) {
+    role;
+
+    constructor(userName, email, password, role) {
         this.userName = userName;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     getUserName() {
@@ -30,5 +33,13 @@ class User{
 
     setPassword(password) {
         this.password = password;
+    }
+
+    getRole() {
+        return this.role;
+    }
+
+    setRole(role) {
+        this.role = role;
     }
 }

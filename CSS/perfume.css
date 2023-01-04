@@ -98,7 +98,7 @@ h3{
     padding: 10px 20px;
     text-transform: uppercase;
     display: inline-block;
-    border: 1px solid #bebebe;
+    /*border: 1px solid #bebebe;*/
     color: #555;
     font-weight: 600;
 }
@@ -106,6 +106,8 @@ h3{
 img{
     max-width: 100%;
     height: auto;
+    overflow: hidden;
+    transform: scale(0.8);
     /*display: block;*/
     /*position: relative;*/
     /*loại bỏ khoảng cachs giữa các thẻ div*/
@@ -132,7 +134,7 @@ a{
 }
 
 #buy{
-    font-size: 15px;
+    font-size: 25px;
     text-decoration: none;
     /*bỏ đường gạch chân*/
     /*text-transform: uppercase;*/
@@ -147,7 +149,12 @@ a{
     /*transition: 0.25s;*/
     opacity: 0.8;
 }
-#buy:hover{
+#buy:hover button{
     color: red;
 }
+.card #buy button{
+    background-color: #7777ee !important;
+    background-image: none;
+}
+
 

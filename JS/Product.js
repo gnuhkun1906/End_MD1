@@ -4,13 +4,15 @@ class Product{
     name;
     message;
     price;
+    idUser
 
-    constructor(id,image, name, message, price) {
+    constructor(id,image, name, message, price, idUser) {
         this.image = image;
         this.name = name;
         this.message = message;
         this.price = price;
         this.id=id
+        this._idUser = idUser;
     }
     getId(){
         return this.id
@@ -49,5 +51,13 @@ class Product{
 
     setPrice(price) {
         this.price = price;
+    }
+
+    getIdUser() {
+        return this.idUser;
+    }
+
+    setIdUser(idUser) {
+        this.idUser = idUser;
     }
 }

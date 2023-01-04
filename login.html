@@ -37,22 +37,20 @@
                                         account</h5>
 
                                     <div class="form-outline mb-4">
-                                        <label class="form-label">Email address</label>
-                                        <input type="email" id="inputEmailAddress"
+                                        <label class="form-label">UserName</label>
+                                        <input oninput="validate()" type="text" id="inputUserName"
                                                class="form-control form-control-lg"/>
                                     </div>
 
                                     <div class="form-outline mb-4">
                                         <label class="form-label">Password</label>
-                                        <input type="password" id="inputPasswordLogin"
+                                        <input oninput="validate()" type="password" id="inputPasswordLogin"
                                                class="form-control form-control-lg"/>
                                     </div>
 
                                     <div class="pt-1 mb-4">
-                                        <p id="fail"></p>
-                                        <button class="btn btn-dark btn-lg btn-block" onclick="login1()" type="button">
-                                            Login
-                                        </button>
+                                        <p class="text-danger" id="fail"></p>
+                                        <button onclick="signIn()" type="button" class="btn btn-dark btn-lg btn-block" >  Login</button>
                                     </div>
 
                                     <!--                                    <a class="small text-muted" href="#!">Forgot password?</a>-->
@@ -72,32 +70,77 @@
     </div>
 </div>
 <script>
-
-    function Login() {
-        let arr = JSON.parse(localStorage.getItem('List_user'));
-        let check = true;
-        let inputEmailAddress = document.getElementById('inputEmailAddress').value;
-        let inputPasswordLogin = document.getElementById('inputPasswordLogin').value;
-        if (inputEmailAddress.trim() === '' || inputPasswordLogin.trim() === '') {
+    let listUser = JSON.parse(localStorage.getItem('List_user'));
+    let userName
+    let password
+    function signIn() {
+        userName = document.getElementById('inputUserName').value;
+        password = document.getElementById('inputPasswordLogin').value;
+        if (userName.trim() === '' || password.trim() === '') {
             document.querySelector('#fail').innerHTML = 'Vui lòng không để trống'
-            check = false;
-        }
-        for (let i = 0; i < arr.length; i++) {
-            if (inputEmailAddress === arr[i].email && inputPasswordLogin === arr[i].password) {
-                localStorage.setItem('user', JSON.stringify(arr[i]))
-                check = true;
-                break;
+        }else {
+            for (let i = 0; i < listUser.length; i++) {
+                if (userName === listUser[i].userName && password === listUser[i].password) {
+                    // break;
+                    if (listUser[i].role===1){
+                        localStorage.setItem('user', JSON.stringify(listUser[i]))
+                        location.href = 'CRUD.html'
+                    }else {
+                        localStorage.setItem('user', JSON.stringify(listUser[i]))
+
+                        location.href = 'index.html'
+                    }
+                }
+
+                else {
+                    document.querySelector('#fail').innerHTML = 'Tài khoản hoặc mật khẩu của bạn không đúng'
+                }
             }
+
+
         }
-        if (check) {
-            location.href = 'index.html'
-        } else {
-            document.querySelector('#fail').innerHTML = 'Tài khoản hoặc mật khẩu của bạn không đúng'
-        }
+
+
     }
-    function login1(){
-        location.href='index.html'
-    }
+        // function findByUserName(UserName) {
+        //     for (let i = 0; i < listUser.length; i++) {
+        //         if (listUser[i].userName == UserName) {
+        //             return listUser[i]
+        //
+        //         }
+        //     }
+        // }
+        //
+        // function signIn() {
+        //     console.log('bb',listUser)
+        //     if (check) {
+        //
+        //         let checkLogin = false;
+        //         for (let i = 0; i < listUser.length; i++) {
+        //             if (listUser[i].userName == userName && listUser[i].password == password) {
+        //                 // console.log('i============', i)
+        //                 checkLogin = true;
+        //                 let name = findByUserName(userName).userName
+        //                 localStorage.setItem("nameKey", name)
+        //                 let id = i
+        //                 localStorage.setItem('idKey',JSON.stringify(id))
+        //                 console.log(name)
+        //                 break;
+        //             } else {
+        //                 checkLogin = false;
+        //             }
+        //         }
+        //         // console.log(checkLogin)
+        //         if (checkLogin) {
+        //
+        //             location.href = "index.html"
+        //         } else {
+        //             document.getElementById('fail').innerHTML = 'tai khoan hoặc mật khẩu của bạn không đúng'
+        //         }
+        //
+        //     }
+        // }
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"

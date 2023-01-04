@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gio Hang</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="JS/Cart.js"></script>
+    <link rel="stylesheet" href="CSS/giohang.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <script src="JS/Buy.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="select">
+            <ul>
+                <li>
+                    <button onclick="home()">TRANG CHỦ</button>
+                </li>
+                <li>
+                   <button onclick="perfume()">PERFUME</button>
+                </li>
+
+            </ul>
+        </div>
+        <div class="search">
+            <input type="text" id="input" class="fa fa-search" placeholder="Tìm kiếm">
+            <button onclick="actionSearch()"><i class="bi bi-search"></i></button>
+        </div>
+        <div class="register">
+
+            <div>
+                <button onclick="login()">LOGIN</button>
+            </div>
+            <div>
+                <button onclick="register1()">REGISTER</button>
+            </div>
+        </div>
+
+    </header>
+    <div class="headline">
+        <h3>Giỏ Hàng Của Bạn</h3>
+    </div>
+</div>
+
+
+<div class="table">
+    <table class="table mx-4" >
+
+        <tr style="margin-bottom: 10px ; border-bottom: 1px solid black ">
+            <th>STT</th>
+            <th>Hình</th>
+            <th>Tên Sản Phẩm</th>
+            <th>Thông Tin</th>
+            <th>Đơn giá($)</th>
+            <th>Số Lượng</th>
+            <th>Thành Tiền</th>
+            <th>Xóa</th>
+
+        </tr>
+
+        <tbody id="cartTable">
+          <tr></tr>
+
+        </tbody>
+        <tr style="margin-top:10px ;border-top: 1px solid black" >
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="font-weight: bold ; font-size: 18px">Tổng Tiền:  </td>
+            <td id="total" colspan="8" style=" font-weight: bold ; font-size: 18px"></td>
+
+        </tr>
+    </table>
+    <div id="thanhtoan">
+        <button onclick="show()" data-bs-toggle="modal" data-bs-target="#exampleModal" >MUA HÀNG</button>
+    </div>
+
+    <div id="showProfile"></div>
+
+</div>
+
+<script>
+
+    let user = JSON.parse(localStorage.getItem('user'));
+    if (user != null) {
+        document.querySelector('.register').innerHTML = `<div class="login"><button>${user.userName}</button></div>
+                                                       <div class="register"><button onclick="logOut()">LogOut</button></div>
+                                                         `
+    }
+
+    function logOut() {
+        if (confirm('Bạn chắc chắn không còn lưu luyến gì chứ??')) {
+            localStorage.removeItem('user')
+            location.href = 'index.html';
+        }
+    }
+    let listCart = JSON.parse(localStorage.getItem('list_cart'));
+    if (listCart == null) {
+        listCart = []
+    }
+    console.log(listCart)
+
+
+    function showListCart() {
+        let cartTable = '';
+        let totalSum=0;
+        for (let i = 0; i < listCart.length; i++) {
+            let sum=listCart[i].product.price*listCart[i].quantity
+            totalSum+=sum
+            // console.log('bbb',listCart[i].quantity)
+            cartTable += `<tr>
+                              <td>${i+1}</td>
+                              <td><div style="margin: 5px auto"><img width="100"  src="${listCart[i].product.image}"></div></td>
+                              <td>${listCart[i].product.name}</td>
+                              <td>${listCart[i].product.message}</td>
+                              <td>${'$'+listCart[i].product.price}</td>
+                              <td><button onclick="minus(${listCart[i].product.id})"<i class="bi bi-dash" ></i></button><span id="quantity">${listCart[i].quantity}</span><button onclick="plus(${listCart[i].product.id})" ><i class="bi bi-plus"></i></button></td>
+                              <td >${'$'+(parseInt(listCart[i].product.price) *listCart[i].quantity)}</td>
+                              <td><button style="border: none" onclick="deleteCart()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+  <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+</svg></button></td>
+                         </tr>`
+
+        }
+        document.getElementById('cartTable').innerHTML = cartTable
+        document.getElementById('total').innerHTML='$'+totalSum
+        // console.log('bbb',cartTable)
+    }
+    // function updateQ(id, val) {
+    //     // console.log("onhkhjgj")
+    //     for (let i = 0; i < listCart.length; i++) {
+    //         if (i == id){
+    //             listCart[i].quantity= val;
+    //             break;
+    //         }
+    //     }
+    //     localStorage.setItem('list_cart', JSON.stringify(listCart))
+    //
+    // }
+    showListCart()
+    function findById(id) {
+        for (let i = 0; i < listCart.length; i++) {
+            if (id === listCart[i].product.id) {
+                return listCart[i]
+            }
+        }
+    }
+    function plus(id){
+        let count=findById(id)
+        count.quantity+=1
+        localStorage.setItem('list_cart',JSON.stringify(listCart))
+        showListCart()
+    }
+    function minus(id){
+        let count=findById(id)
+        if (count.quantity>1){
+            count.quantity-=1
+            showListCart()
+        }
+
+    }
+
+    // function minus(btn,id){
+    //    let qq= btn.parentElement.querySelector('#quantity')
+    //
+    //     let count1=qq.innerText
+    //    if (count1<=1){
+    //        return
+    //    }else {
+    //        count1--;
+    //        qq.innerText=count1
+    //         updateQ(id,count1)
+    //    }
+    //
+    // }
+    // function plus(btn,id){
+    //     console.log(id)
+    //     let qq= btn.parentElement.querySelector('#quantity')
+    //    let count1=qq.innerText
+    //     count1++
+    //     // return count1
+    //
+    //     qq.innerText= count1
+    //     updateQ(id,count1)
+    //     showListCart()
+    // }
+    //
+
+    function home() {
+        location.href = 'index.html'
+    }
+    function perfume() {
+        location.href = 'perfume.html'
+}
+
+    function deleteCart(index){
+        if (confirm('Ơ kìa? Mua đi chứ')){
+            listCart.splice(index,1)
+        }
+
+        localStorage.removeItem('list_cart');
+        localStorage.setItem('list_cart',JSON.stringify(listCart))
+
+    }
+    function show(){
+        document.getElementById('showProfile').innerHTML=`<!-- <div class="showProfile">-->
+    </div class=show>
+    <form>
+        <div class="mb-3">
+            <label class="form-label">Họ Và Tên</label>
+            <input style="width: 350px; height: 50px" oninput="validateBuy()" type="text" class="form-control" id="buyName" aria-describedby="emailHelp">
+
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Điện Thoại</label>
+            <input style="height: 50px;width: 350px" type="text" class="form-control" oninput="validateBuy()" id="telephone">
+
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Địa Chỉ</label>
+            <input style="width: 350px; height: 50px" type="text" class="form-control" oninput="validateBuy()" id="address">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Thời Gian</label>
+            <input style="width: 350px; height: 50px" type="text" class="form-control" oninput="validateBuy()" id="time">
+        </div>
+        <div>
+            <p class="text-danger" id="failBuy"></p>
+        <button type="submit" class="btn btn-primary" onclick="creatBuy()">Chốt Đơn</button>
+        <button type="submit" class="btn btn-success">Hủy</button>
+        </div>
+    </form>
+</div>`
+    }
+    listBuy = JSON.parse(localStorage.getItem('list_buy'));
+    if (listBuy == null) {
+        listBuy = []
+    }
+    let checkBuy;
+    let buyName;
+    let telephone;
+    let address;
+    let time;
+    function validateBuy(){
+        buyName = document.getElementById('buyName').value;
+        console.log('bvb', buyName)
+        telephone = document.getElementById('telephone').value;
+        address = document.getElementById('address').value;
+        time = document.getElementById('time').value;
+
+        if (buyName.trim()==''|| telephone.trim()==''||address.trim()==''||time.trim()==''){
+            document.getElementById('failBuy').innerHTML='Vui lòng không để trống'
+            checkBuy=false;
+        }else{
+            document.getElementById('failBuy').innerHTML=''
+            checkBuy=true
+        }
+
+    }
+    function creatBuy(){
+            if (checkBuy){
+                let buy = new Buy(buyName, telephone, address, time)
+                listBuy.push({
+                    'cart': listCart,
+                    ...buy
+                });
+                // localStorage.removeItem('list_buy')
+                localStorage.setItem('list_buy',JSON.stringify(listBuy))
+            }
+            showProfile()
+        }
+    function showProfile(){
+        let drawBuy='';
+        for (let i = 0; i <listBuy.length ; i++) {
+            for (let j = 0; j <listBuy[i].cart.length ; j++) {
+                console.log(listBuy[i].cart[j].product.name)
+
+
+            drawBuy+=`<div style="width: 60%;margin: 10px auto">
+                  <h6><i class="bi bi-check-square" style="color: green"></i>Bạn đã đặt hàng thành công</h6>
+                   <div style="margin: 5px auto"><img width="100"  src="${listBuy[i].cart[j].product.image}"></div>
+
+                              <p>${listBuy[i].cart[j].product.message}</p>
+                              <p>${listBuy[i].cart[j].quantity}</p>
+                              <p>${listBuy[i].cart[j].quantity*listBuy[i].cart[j].product.price}</p>
+                 <p>${'Họ và tên:  '+ listBuy[i].buyName}</p>
+                 <p>${'Số điện thoại:  '+listBuy[i].telephone}</p>
+                 <p>${'Địa chỉ:  '+listBuy[i].address}</p>
+                 <p>${'Giờ nhận:  '+listBuy[i].time}</p>
+
+</div>`
+        }
+            // localStorage.removeItem('list_cart');
+    }
+        document.querySelector('#showProfile').innerHTML=drawBuy;
+
+
+    } showProfile()
+
+
+
+    // var exampleModal = document.getElementById('exampleModal')
+    // exampleModal.addEventListener('show.bs.modal', function (event) {
+    //     // Button that triggered the modal
+    //     var button = event.relatedTarget
+    //     // Extract info from data-bs-* attributes
+    //     var recipient = button.getAttribute('data-bs-whatever')
+    //     // If necessary, you could initiate an AJAX request here
+    //     // and then do the updating in a callback.
+    //     //
+    //     // Update the modal's content.
+    //     var modalTitle = exampleModal.querySelector('.modal-title')
+    //     var modalBodyInput = exampleModal.querySelector('.modal-body input')
+    //
+    //     modalTitle.textContent = 'New message to ' + recipient
+    //     modalBodyInput.value = recipient
+    // })
+</script>
+<footer>
+    <div class="container my-5">
+
+        <footer class="text-white text-center text-lg-start" style="background-color: #23242a;">
+            <!-- Grid container -->
+            <div class="container p-4">
+                <!--Grid row-->
+                <div class="row mt-4">
+                    <!--Grid column-->
+                    <div class="col-lg-4 col-md-12 mb-4 mb-md-0">
+                        <h5 class="text-uppercase mb-4">About company</h5>
+
+                        <p>
+                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
+                            voluptatum deleniti atque corrupti.
+                        </p>
+
+                        <p>
+                            Blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas
+                            molestias.
+                        </p>
+
+                        <div class="mt-4">
+                            <!-- Facebook -->
+                            <a type="button" class="btn btn-floating btn-warning btn-lg"><i class="bi bi-facebook"></i></a>
+                            <!-- Dribbble -->
+                            <a type="button" class="btn btn-floating btn-warning btn-lg"><i class="bi bi-dribbble"></i></a>
+                            <!-- Twitter -->
+                            <a type="button" class="btn btn-floating btn-warning btn-lg"><i
+                                    class="bi bi-twitter"></i></a>
+                            <!-- Google + -->
+                            <a type="button" class="btn btn-floating btn-warning btn-lg"><i
+                                    class="bi bi-google"></i></a>
+                            <!-- Linkedin -->
+                        </div>
+                    </div>
+                    <!--Grid column-->
+
+                    <!--Grid column-->
+                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-uppercase mb-4 pb-1">Search something</h5>
+
+                        <div class="form-outline form-white mb-4">
+                            <input type="text" id="formControlLg" class="form-control form-control-lg">
+                            <label class="form-label" for="formControlLg" style="margin-left: 0px;">Search</label>
+                            <div class="form-notch">
+                                <div class="form-notch-leading" style="width: 9px;"></div>
+                                <div class="form-notch-middle" style="width: 48.8px;"></div>
+                                <div class="form-notch-trailing"></div>
+                            </div>
+                        </div>
+
+                        <ul class="fa-ul" style="margin-left: 1.65em;">
+                            <li class="mb-3">
+                                <span class="fa-li"><i class="fas fa-home"></i></span><span class="ms-2">New York, NY 10012, US</span>
+                            </li>
+                            <li class="mb-3">
+                                <span class="fa-li"><i class="fas fa-envelope"></i></span><span class="ms-2">info@example.com</span>
+                            </li>
+                            <li class="mb-3">
+                                <span class="fa-li"><i class="fas fa-phone"></i></span><span class="ms-2">+ 01 234 567 88</span>
+                            </li>
+                            <li class="mb-3">
+                                <span class="fa-li"><i class="fas fa-print"></i></span><span class="ms-2">+ 01 234 567 89</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--Grid column-->
+
+                    <!--Grid column-->
+                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-uppercase mb-4">Opening hours</h5>
+
+                        <table class="table text-center text-white">
+                            <tbody class="font-weight-normal">
+                            <tr>
+                                <td>Mon - Thu:</td>
+                                <td>8am - 9pm</td>
+                            </tr>
+                            <tr>
+                                <td>Fri - Sat:</td>
+                                <td>8am - 1am</td>
+                            </tr>
+                            <tr>
+                                <td>Sunday:</td>
+                                <td>9am - 10pm</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--Grid column-->
+                </div>
+                <!--Grid row-->
+            </div>
+            <!-- Grid container -->
+
+            <!-- Copyright -->
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                © 2022 Copyright:
+                <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+            </div>
+            <!-- Copyright -->
+        </footer>
+
+    </div>
+    <!-- End of .container -->
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+</body>
+</html>

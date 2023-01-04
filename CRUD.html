@@ -7,11 +7,48 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+    <link rel="stylesheet" href="CSS/perfume.css">
+
 </head>
 <body>
 <!--<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"-->
 <!--        data-bs-whatever="@mdo">-->
 <!--</button>-->
+<header>
+    <div class="select">
+        <ul>
+            <li>
+                <button onclick="home()">TRANG CHỦ</button>
+            </li>
+
+            <li>
+                <button onclick="perfume()">PERFUME</button>
+            </li>
+<!--            <li>-->
+<!--                <button onclick="creat()">CRUD</button>-->
+<!--            </li>-->
+<!--            <li id="numberCart">-->
+<!--                <button onclick="cart()"  ><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">-->
+<!--                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>-->
+<!--                </svg></i></button>-->
+<!--            </li>-->
+        </ul>
+    </div>
+    <div class="search">
+        <input type="text" id="" oninput="actionSearch()" class="fa fa-search" placeholder="Tìm kiếm">
+        <button onclick=""><i class="bi bi-search"></i></button>
+    </div>
+<!--    <div class="register">-->
+<!--        <div class="login">-->
+<!--            <button onclick="login()">LOGIN</button>-->
+<!--        </div>-->
+<!--        <div class="register">-->
+<!--            <button onclick="register1()">REGISTER</button>-->
+<!--        </div>-->
+<!--    </div>-->
+
+</header>
 
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -23,10 +60,10 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <div class="mb-3">
-                        <label class="col-form-label">Image</label>
-                        <input type="text" class="form-control" id="update-image">
-                    </div>
+<!--                    <div class="mb-3">-->
+<!--                        <label class="col-form-label">Image</label>-->
+<!--                        <input type="text" class="form-control" id="update-image">-->
+<!--                    </div>-->
                     <div class="mb-3">
                         <label class="col-form-label">Product Name</label>
                         <input type="text" class="form-control" id="update-name">
@@ -55,11 +92,7 @@
             <button onclick="createProduct()" type="submit">CreatProduct <i style="color: orangered"
                                                                             class="bi bi-pencil"></i></button>
         </div>
-        <div class="input-group mb-3">
-            <input id="image" type="text" class="form-control" placeholder="image" aria-label="Recipient's username"
-                   aria-describedby="basic-addon2">
-            <span class="input-group-text">Image</span>
-        </div>
+
         <div class="input-group mb-3">
             <input id="name" type="text" class="form-control" placeholder="Name" aria-label="Recipient's username"
                    aria-describedby="basic-addon2">
@@ -71,10 +104,15 @@
             <span class="input-group-text">Message</span>
         </div>
         <div class="input-group mb-3">
-            <input id="price" type="text" class="form-control" placeholder="Price" aria-label="Recipient's username"
+            <input id="price" type="number" class="form-control" placeholder="Price" aria-label="Recipient's username"
                    aria-describedby="basic-addon2">
             <span class="input-group-text">Price</span>
         </div>
+<!--        UPLOAD fILE-->
+        <progress value="0" max="100" id="uploader">0%</progress>
+        <input type="file" value="upload"  id="fileButton">
+<!--        <h1>Hello GFG</h1>-->
+        <div id="imgDiv"></div>
         <table class="table">
             <tr CLASS="table-primary">
                 <th>ID</th>
@@ -90,6 +128,8 @@
     </div>
 </div>
 <script>
+
+
     let listProduct = JSON.parse(localStorage.getItem('list_product'))
     if (listProduct == null) {
         listProduct = []
@@ -100,16 +140,15 @@
         for (let i = 0; i < listProduct.length; i++) {
             drawTable += `<tr>
                                 <td>${i}</td>
-                                <td>${listProduct[i].image}</td>
-                                <td>${listProduct[i].name}</td>
+                                 <td><img style="width: 200px ; height: 200px" src="${listProduct[i].image}" alt=""></td>
+                                  <td>${listProduct[i].name}</td>
                                 <td>${listProduct[i].message}</td>
-                                <td>${listProduct[i].price}</td>
+                                <td>${'$'+listProduct[i].price}</td>
                                 <td><button  data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="showUpdateModal(${listProduct[i].id})" class="btn btn- success" ><i class="bi bi-pencil-fill"></i></button></td>
                                 <td><button   onclick="deleteProduct(${i})" class="btn btn- success" ><i class="bi bi-trash-fill"></i></button></td>
                             </tr>`
         }
         document.getElementById('drawTable').innerHTML = drawTable
-        console.log('có lấy đc không',drawTable)
 
     }
 
@@ -117,8 +156,8 @@
 
     function createProduct() {
         let id;
-        console.log('id',id)
-        let image = document.getElementById('image').value;
+        let image = getImage();
+        console.log(image)
         let name = document.getElementById('name').value;
         let message = document.getElementById('message').value;
         let price = document.getElementById('price').value;
@@ -147,9 +186,7 @@
 
     function showUpdateModal(id) {
         idUpdate = id;
-        console.log('---->', id)
         let product = findById(id);
-        console.log('.,,....', product)
         document.getElementById('update-image').value = product.image
         document.getElementById('update-name').value = product.name
         document.getElementById('update-message').value = product.message
@@ -200,7 +237,12 @@
         modalTitle.textContent = 'Update Student :  ' + recipient
         modalBodyInput.value = recipient
     })
-
+    function home() {
+        location.href = 'index.html'
+    }
+    function perfume() {
+        location.href = 'perfume.html'
+    }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
@@ -211,5 +253,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
+<script src="JS/upload.js"></script>
 </body>
 </html>

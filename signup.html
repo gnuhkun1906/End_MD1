@@ -104,14 +104,15 @@
         const EMAIL_PATTERN = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         const PASSWORD_PATTERN = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
         //UserName
-        console.log('--->', userName)
+        // console.log('--->', userName)
         if (userName.trim() === '') {
             document.querySelector('#failUserName').innerHTML = 'Vui lòng không để trống!'
             check = false;
         } else if (userName.length < 6) {
             document.querySelector('#failUserName').innerHTML = 'Tên đăng nhập của bạn ít nhất phải có 6 kí tự'
             check = false;
-        } else if (checkUserNameExist()) {
+        } else if (checkUserNameExist(userName)) {
+            console.log('co check dc khong',checkUserNameExist(userName))
             document.querySelector('#failUserName').innerHTML = 'Tên đăng nhập đã tồn tại'
         } else {
             document.querySelector('#failUserName').innerHTML = ''
@@ -126,7 +127,7 @@
         } else if (!EMAIL_PATTERN.test(email)) {
             document.querySelector('#failEmail').innerHTML = 'Email của bạn chưa đúng định dạng'
             check = false;
-        } else if (checkEmailExist()) {
+        } else if (checkEmailExist(email)) {
             document.querySelector('#failEmail').innerHTML = 'Email này đã tồn tại'
         } else {
             document.querySelector('#failEmail').innerHTML = ''
@@ -141,7 +142,7 @@
         } else if (password.length < 8) {
             document.querySelector('#failPassword').innerHTML = 'Mật khẩu chưa đủ mạnh'
             check = false;
-        } else if (checkPasswordExist()) {
+        } else if (checkPasswordExist(password)) {
             document.querySelector('#failPassword').innerHTML = 'Password này đã tồn tại'
         } else {
             document.querySelector('#failPassword').innerHTML = ''
@@ -158,7 +159,7 @@
         }
         if (check) {
             isCheck = true;
-            user = new User(userName, email, password)
+            user = new User(userName, email, password,0)
         } else {
             isCheck = false
         }

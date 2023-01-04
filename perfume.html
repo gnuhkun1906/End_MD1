@@ -3,27 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Perfume</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="CSS/perfume.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="CSS/perfume.css">
 </head>
 <body>
 <header>
     <div class="select">
         <ul>
-            <li><button onclick="home()">TRANG CHỦ</button></li>
+            <li>
+                <button onclick="home()"><i class="bi bi-house-door-fill" style="margin-right: 5px"></i>TRANG CHỦ
+                </button>
+            </li>
 
-            <li><button onclick="perfume()">PERFUME</button></li>
-            <li><button onclick="creat()">CRUD</button></li>
+            <li>
+                <button onclick="perfume()">PERFUME</button>
+            </li>
+            <li id="crud">
+
+            </li>
+            <li id="numberCart">
+
+            </li>
         </ul>
     </div>
     <div class="search">
-        <input type="text" id="" oninput="actionSearch()" class="fa fa-search" placeholder="Tìm kiếm" >
-        <button onclick=""><i class="bi bi-search"></i></button>
+        <input type="text" id="" class="fa fa-search" placeholder="Tìm kiếm">
+        <button onclick="actionSearch()"><i class="bi bi-search"></i></button>
     </div>
     <div class="register">
-        <div class="login"><button onclick="login()">LOGIN</button></div>
-        <div class="register"><button onclick="register1()">REGISTER</button></div>
+        <div class="login">
+            <button onclick="login()">LOGIN</button>
+        </div>
+        <div class="register">
+            <button onclick="register1()">REGISTER</button>
+        </div>
     </div>
 
 </header>
@@ -31,91 +46,191 @@
     <h3>Perfume</h3>
 </div>
 <div class="row row-cols-1 row-cols-md-4 g-4" id="drawTable">
-
 </div>
 
 <script>
-  listProduct=JSON.parse(localStorage.getItem('list_product'))
-  if (listProduct==null){
-      listProduct=[]
-  }
-  function showListProduct(list){
 
-    let drawTable='';
-    for (let i = 0; i <list.length ; i++) {
-      drawTable+=`<div class="col">
+    let user = JSON.parse(localStorage.getItem('user'));
+    if (user != null) {
+        document.querySelector('.register').innerHTML = `<div class="login"><button><i class="bi bi-person-circle" style="margin-right: 5px"></i>${user.userName}</button></div>
+                                                       <div class="register"><button onclick="logOut()">LogOut</button></div>
+                                                         `
+    }
+    if (user.role===1){
+        document.getElementById('crud').innerHTML=`<a href="CRUD.html"><button >CRUD</button></a>`
+    }else {
+        document.getElementById('crud').innerHTML=`   <button onclick="cart()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                         class="bi bi-cart3" viewBox="0 0 16 16">
+                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                    </svg>
+                    </i></button>
+                <div><sup id="number" style="border-radius: 75%;border: 1px solid ; background-color: white; color: black; font-size: 15px"></sup></div>
+`
+    }
+    let listCart = JSON.parse(localStorage.getItem('list_cart'));
+    if (listCart == null) {
+        listCart = []
+    }
+
+    listProduct = JSON.parse(localStorage.getItem('list_product'))
+    if (listProduct == null) {
+        listProduct = []
+    }
+    showListProduct(listProduct)
+
+    function showListProduct(list) {
+
+        let drawTable = '';
+        for (let i = 0; i < list.length; i++) {
+            drawTable += `<div class="col">
   <div class="card">
-    <img src="./image2/${list[i].image}.jpg" class="card-img-top" alt="">
-<a href="" id="buy">MUA NGAY</a>
+    <img src="${list[i].image}" class="card-img-top" alt="">
+<a id="buy"><button type="button" onclick="addCart(${list[i].id})">Thêm vào giỏ hàng</button></a>
     <div class="card-body" >
 
       <h5 class="card-title">${list[i].name}</h5>
       <p class="card-text">${list[i].message}</p>
-      <a class="card-text">${list[i].price}</a>
+      <a class="card-text">${'$' + list[i].price}</a>
     </div>
 
   </div>
 </div>`
 
-    } document.getElementById('drawTable').innerHTML=drawTable;
-  }
-  let search1 = localStorage.getItem("search");
-  console.log(search1)
-  if (search1!=null){
+        }
+        document.getElementById('drawTable').innerHTML = drawTable;
+        console.log(listCart.length)
+        document.getElementById('number').innerHTML = listCart.length
+    }
+
+    let search1 = localStorage.getItem("search");
+    // console.log(search1)
+    if (search1 != null) {
         actionSearch()
-  }else {
-      showListProduct(listProduct)
-  }
-  function actionSearch(){
-      let listSearch =[]
-      let isEmpty= false
+    } else {
+        showListProduct(listProduct)
+    }
 
-      for (let i = 0; i <listProduct.length ; i++) {
-          if (listProduct[i].name.toLowerCase().includes(search1.toLowerCase())){
-              listSearch.push(listProduct[i])
-              isEmpty= true
-          }
-      }
-      if (isEmpty){
-          showListProduct(listSearch);
-          localStorage.removeItem('search')
-      }else {
-          document.write("ERROR")
-      }
+    function actionSearch() {
+        let listSearch = []
+        let isEmpty = false
 
-  }
-function home(){
-      location.href='index.html'
-}
-  function login(){
-      location.href="login.html"
-  }
-  function register1(){
-      location.href="sign up.html"
-  }
-  function perfume(){
-      location.href='perfume.html'
-  }
-  function creat(){
-      location.href='CRUD.html'
-  }
+        for (let i = 0; i < listProduct.length; i++) {
+            if (listProduct[i].name.toLowerCase().includes(search1.toLowerCase())) {
+                listSearch.push(listProduct[i])
+                isEmpty = true
+            }
+        }
+        if (isEmpty) {
+            showListProduct(listSearch);
+            localStorage.removeItem('search')
+        } else {
+            document.write("ERROR")
+        }
 
-      let user = JSON.parse(localStorage.getItem('user'));
-      if (user != null) {
-      document.querySelector('.register').innerHTML = `<div class="login"><button>${user.userName}</button></div>
-                                                       <div class="register"><button onclick="logOut()">LogOut</button></div>
-                                                         `
-  }
+    }
 
-      function logOut() {
-      if (confirm('Bạn chắc chắn không còn lưu luyến gì chứ??')) {
-      localStorage.removeItem('user')
-      location.href = 'index.html';
-  }
-  }
+    function home() {
+        location.href = 'index.html'
+    }
+
+    function login() {
+        location.href = "login.html"
+    }
+
+    function register1() {
+        location.href = "sign up.html"
+    }
+
+    function perfume() {
+        location.href = 'perfume.html'
+    }
+
+    function creat() {
+        location.href = 'CRUD.html'
+    }
+
+    function cart() {
+        location.href = 'giohang.html'
+    }
+
+
+    // let admin=JSON.parse(localStorage.getItem('admin'));
+    // console.log('bbb',admin)
+    // if (admin != null) {
+    //     document.querySelector('.register').innerHTML = `<div class="login"><button><i class="bi bi-person-circle"></i>${admin.userName}</button></div>
+    //                                                <div class="register"><button onclick="logOut()">LogOut</button></div>
+    //                                                  `
+    // }
+
+
+
+        function logOut() {
+            if (confirm('Bạn chắc chắn không còn lưu luyến gì chứ??')) {
+                localStorage.removeItem('user')
+                location.href = 'index.html';
+            }
+        }
+
+        function findById(id) {
+            for (let i = 0; i < listProduct.length; i++) {
+                if (id === listProduct[i].id) {
+                    return listProduct[i]
+                }
+            }
+        }
+
+
+        // let count=0
+        function addCart(id) {
+            //check nếu đăng nhập đc thì mới add vào giỏ hàng
+            user = JSON.parse(localStorage.getItem('user'));
+            if (user == null) {
+                alert('Bạn cần phải đăng nhập')
+            } else {
+                // addCart(id)
+
+
+                let cart1 = findById(id)
+                // console.log(cart1)
+                if (listCart.length == 0) {
+                    listCart.push({
+                        'product': cart1,
+                        'quantity': 1
+                    })
+                } else {
+                    let checkExist = false
+                    for (let i = 0; i < listCart.length; i++) {
+                        if (listCart[i].product.id == id) {
+                            checkExist = true
+                            listCart[i].quantity += 1;
+                            break;
+                        }
+                    }
+                    if (!checkExist) {
+                        listCart.push({
+                            'product': cart1,
+                            'quantity': 1
+                        })
+                    }
+
+                }
+
+                localStorage.setItem('list_cart', JSON.stringify(listCart))
+
+                document.getElementById('number').innerHTML = listCart.length
+            }
+        }
+
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
 </body>
 </html>

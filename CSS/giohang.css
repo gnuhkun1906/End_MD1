@@ -1,0 +1,140 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+body{
+    font-family: "Open san", sans-serif;
+    font-size: 14px;
+    color: #1a1818;
+    line-height: 1.15;
+}
+header{
+    display: flex;
+    flex-basis: 33.3%;
+    max-width: 100%;
+    font-weight: bold;
+    background-image: linear-gradient(0, #dcc9ea, #dcc0f3);
+    height: 70px;
+    padding: 0 30px;
+    justify-content: space-between;
+
+}
+/*ul{*/
+/*    justify-content: space-between;*/
+/*    display: flex;*/
+/*}*/
+/*li{*/
+/*    list-style: none;*/
+/*    text-decoration: none;*/
+/*    line-height: 70px;*/
+/*    margin: 0 30px;*/
+/*    text-transform: uppercase;*/
+/*    background-image: linear-gradient(0, #dcc9ea, #dcc0f3);*/
+/*}*/
+ul{
+    margin: auto;
+    /*align-items: center;*/
+}
+.select ul li{
+    list-style: none;
+    float: left;
+    line-height: 70px;
+    padding: 0 30px;
+    text-transform: uppercase;
+}
+li:hover{
+    color: red;
+}
+.select ul li{
+    display: flex;
+
+}
+li button{
+    border: none;
+    background-image:linear-gradient(0, #dcc9ea, #dcc0f3);
+    font-weight: bold;
+}
+li button:hover{
+    color: red;
+}
+.search{
+    margin: auto;
+}
+.search button{
+    border: none;
+}
+
+input {
+    width: 250px;
+    height: 30px;
+    border: none;
+    border-bottom: 1px solid #333;
+}
+.search button{
+    border: none;
+    background-image: linear-gradient(0, #dcc9ea, #dcc0f3);
+    /*border-bottom: 1px solid #333;*/
+}
+.register{
+    display: flex;
+    justify-content: space-between;
+    float: right;
+    padding: 0 30px;
+    align-items: center;
+}
+.register button{
+    border: none;
+    background-image: linear-gradient(0, #dcc9ea, #dcc0f3);
+    font-weight: bold;
+}
+.register button:hover{
+    color: red;
+
+}
+
+.headline{
+    text-align: center;
+    margin: 40px 0;
+}
+h3{
+    font-size: 18px;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    display: inline-block;
+    border: 1px solid #bebebe;
+    color: #555;
+    font-weight: 600;
+}
+.table{
+    max-width: 80%;
+    margin: 0 auto;
+
+}
+#thanhtoan{
+    height: 60px;
+    margin-top: 30px;
+    margin-right: 220px;
+}
+#thanhtoan button{
+      color: white;
+    background-color: orangered;
+    border-radius: 25px;
+    float: right;
+
+
+  }
+#cartTable td button{
+    border: none;
+    width: 20px;
+    height: 20px;
+}
+
+.show form input{
+    width: 350px;
+    height: 50px;
+}
+.done{
+    display: flex;
+    box-sizing: border-box;
+    justify-content: space-between;
+}
