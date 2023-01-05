@@ -285,13 +285,13 @@
                 console.log(listBuy[i].cart[j].product.name)
 
 
-            drawBuy+=`<div style="width: 60%;margin: 10px auto">
+            drawBuy+=`<div style="width: 40%;margin: 10px auto ; border: 1px solid ; text-align: center">
                   <h6><i class="bi bi-check-square" style="color: green"></i>Bạn đã đặt hàng thành công</h6>
                    <div style="margin: 5px auto"><img width="100"  src="${listBuy[i].cart[j].product.image}"></div>
 
                               <p>${listBuy[i].cart[j].product.message}</p>
-                              <p>${listBuy[i].cart[j].quantity}</p>
-                              <p>${listBuy[i].cart[j].quantity*listBuy[i].cart[j].product.price}</p>
+                              <p>${'Số lượng:  '+listBuy[i].cart[j].quantity}</p>
+                              <p>${'Đơn giá:  '+'$'+listBuy[i].cart[j].quantity*listBuy[i].cart[j].product.price}</p>
                  <p>${'Họ và tên:  '+ listBuy[i].buyName}</p>
                  <p>${'Số điện thoại:  '+listBuy[i].telephone}</p>
                  <p>${'Địa chỉ:  '+listBuy[i].address}</p>
@@ -299,12 +299,13 @@
 
 </div>`
         }
-            // localStorage.removeItem('list_cart');
+
     }
         document.querySelector('#showProfile').innerHTML=drawBuy;
 
 
     } showProfile()
+    localStorage.removeItem('list_cart');
 
 
 
